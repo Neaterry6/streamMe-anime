@@ -63,10 +63,26 @@ app.get('/api/links', async (req, res) => {
     }
 });
 
+// Get trending anime
+app.get('/api/trending', async (req, res) => {
+    try {
+        const response = await axios.get(`${CONSUMET_API}/recent-episodes`);
+        res.json({
+            results: response.data.results.map(item => ({
+                id: item.id,
+                title: item.title,
+                image: item.image
+            }))
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch trending anime' });
+    }
+});
+
 // Serve index.html
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
