@@ -3,403 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamMe Anime - Login</title>
+    <title>StreamMe Anime</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #E1306C;
-            --gradient: linear-gradient(45deg, #405DE6, #E1306C);
-            --dark-bg: #0F0F0F;
-            --light-bg: #1E1E1E;
-            --text: #FFFFFF;
-            --text-secondary: #AAAAAA;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-            --transition: all 0.3s ease;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Poppins', sans-serif; background: var(--dark-bg);
-            color: var(--text); min-height: 100vh; display: flex; justify-content: center;
-            align-items: center; padding: 20px;
-        }
-        .container {
-            background: var(--light-bg); padding: 30px; border-radius: 15px;
-            box-shadow: var(--shadow); max-width: 1200px; width: 100%; text-align: center;
-        }
-        .logo {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin-bottom: 20px;
-        }
-        .logo-icon { width: 40px; height: 40px; }
-        .logo-text {
-            font-size: 1.8rem; font-weight: 600;
-            background: var(--gradient); -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        h1 { font-size: 1.5rem; margin-bottom: 20px; }
-        .input-group {
-            margin-bottom: 15px; text-align: left;
-        }
-        .input-group label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
-        .input-group input {
-            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--text-secondary);
-            background: var(--dark-bg); color: var(--text); font-size: 1rem;
-        }
-        .input-group input:focus { outline: none; border-color: var(--primary); }
-        button {
-            width: 100%; padding: 12px; border-radius: 8px; border: none;
-            background: var(--gradient); color: var(--text); font-weight: 600;
-            cursor: pointer; transition: var(--transition);
-        }
-        button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(225, 48, 108, 0.3); }
-        .toggle-link {
-            color: var(--text-secondary); font-size: 0.9rem; margin-top: 10px; display: block;
-            cursor: pointer; text-decoration: underline;
-        }
-        .toggle-link:hover { color: var(--primary); }
-        .login-section, .signup-section, .main-section { display: none; }
-        .login-section.active, .signup-section.active, .main-section.active { display: block; }
-        .search-section { margin-bottom: 30px; }
-        .search-form { display: flex; gap: 10px; justify-content: center; max-width: 400px; margin: 0 auto; }
-        #animeSearch { flex: 1; }
-        .search-btn {
-            padding: 10px 20px; background: var(--primary); width: auto;
-        }
-        .trending-section { margin-top: 20px; }
-        .trending-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;
-        }
-        .trending-item {
-            background: var(--dark-bg); padding: 10px; border-radius: 8px;
-            cursor: pointer; transition: var(--transition);
-        }
-        .trending-item:hover { transform: scale(1.05); }
-        .trending-item img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-        .trending-item h3 { font-size: 0.9rem; margin-top: 8px; }
-        .result-section { margin-top: 20px; }
-        .result-item {
-            background: var(--dark-bg); padding: 10px; border-radius: 8px;
-            display: flex; gap: 10px; align-items: center; margin-bottom: 10px;
-        }
-        .result-item img { width: 60px; height: 90px; object-fit: cover; border-radius: 5px; }
-        .result-item div { flex: 1; }
-        .result-item h3 { font-size: 1rem; margin-bottom: 5px; }
-        .episode-btn, .download-btn {
-            padding: 8px 12px; font-size: 0.9rem; margin-top: 5px; display: inline-block;
-            background: var(--dark-bg); border: 1px solid var(--text-secondary); color: var(--text);
-        }
-        .download-btn { background: var(--primary); }
-        .error { color: var(--primary); margin-top: 10px; display: none; }
-        .error.active { display: block; }
-        .loading-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--dark-bg); display: flex; justify-content: center;
-            align-items: center; z-index: 1000;
-        }
-        .glitch {
-            font-size: 2.5rem; font-weight: 700; color: var(--text);
-            text-transform: uppercase; position: relative;
-            background: var(--gradient); -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glitch 1s linear infinite;
-        }
-        .glitch::before, .glitch::after {
-            content: 'StreamMe Anime'; position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-        }
-        .glitch::before { color: var(--primary); animation: glitch-top 1s linear infinite; clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%); }
-        .glitch::after { color: #405DE6; animation: glitch-bottom 1.5s linear infinite; clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%); }
-        @keyframes glitch {
-            2% { transform: translate(2px, -2px); }
-            4% { transform: translate(-2px, 2px); }
-            98% { transform: none; }
-        }
-        @keyframes glitch-top {
-            2% { transform: translate(3px, -1px); }
-            4% { transform: translate(-3px, 1px); }
-            98% { transform: none; }
-        }
-        @keyframes glitch-bottom {
-            2% { transform: translate(-3px, 1px); }
-            4% { transform: translate(3px, -1px); }
-            98% { transform: none; }
-        }
-        @media (max-width: 768px) {
-            .container { padding: 20px; }
-            .logo-text { font-size: 1.5rem; }
-            .trending-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-        }
-        @media (max-width: 480px) {
-            .trending-item img { height: 150px; }
-            .glitch { font-size: 2rem; }
-        }
-    </style>
+    <link rel="stylesheet" href="https://vjs.zencdn.net/8.10.0/video-js.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="loading-screen" id="loadingScreen">
-        <div class="glitch">StreamMe Anime</div>
+<body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col">
+    <div id="loadingScreen" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
+        <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-pink-500 animate-glitch">
+            StreamMe Anime
+        </div>
     </div>
-    <div class="container">
-        <div class="logo">
-            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="var(--primary)">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
-            <span class="logo-text">StreamMe Anime</span>
-        </div>
-        <div id="loginSection" class="login-section">
-            <h1>Login</h1>
-            <form id="loginForm">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Enter username" required>
+    <div class="flex-1 max-w-7xl mx-auto p-4">
+        <header class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-2">
+                <svg class="w-8 h-8 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent">
+                    StreamMe Anime
+                </span>
+            </div>
+            <button id="logoutBtn" class="hidden px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition">Logout</button>
+        </header>
+        <div id="loginSection" class="hidden flex-col items-center">
+            <h1 class="text-2xl font-semibold mb-4">Login</h1>
+            <form id="loginForm" class="w-full max-w-md">
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-400">Username</label>
+                    <input type="text" id="username" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white" placeholder="Enter username" required>
                 </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter password" required>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-400">Password</label>
+                    <input type="password" id="password" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white" placeholder="Enter password" required>
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" class="w-full p-3 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition">Login</button>
             </form>
-            <p class="error" id="loginError"></p>
-            <span class="toggle-link" id="showSignup">Don't have an account? Sign Up</span>
+            <p id="loginError" class="text-red-500 mt-2 hidden"></p>
+            <span id="showSignup" class="text-gray-400 mt-2 cursor-pointer underline hover:text-pink-500">Don't have an account? Sign Up</span>
         </div>
-        <div id="signupSection" class="signup-section">
-            <h1>Sign Up</h1>
-            <form id="signupForm">
-                <div class="input-group">
-                    <label for="signupUsername">Username</label>
-                    <input type="text" id="signupUsername" placeholder="Choose a username" required>
+        <div id="signupSection" class="hidden flex-col items-center">
+            <h1 class="text-2xl font-semibold mb-4">Sign Up</h1>
+            <form id="signupForm" class="w-full max-w-md">
+                <div class="mb-4">
+                    <label for="signupUsername" class="block text-gray-400">Username</label>
+                    <input type="text" id="signupUsername" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white" placeholder="Choose a username" required>
                 </div>
-                <div class="input-group">
-                    <label for="signupEmail">Email</label>
-                    <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                <div class="mb-4">
+                    <label for="signupEmail" class="block text-gray-400">Email</label>
+                    <input type="email" id="signupEmail" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white" placeholder="Enter your email" required>
                 </div>
-                <div class="input-group">
-                    <label for="signupPassword">Password</label>
-                    <input type="password" id="signupPassword" placeholder="Create a password" required>
+                <div class="mb-4">
+                    <label for="signupPassword" class="block text-gray-400">Password</label>
+                    <input type="password" id="signupPassword" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white" placeholder="Create a password" required>
                 </div>
-                <button type="submit">Sign Up</button>
+                <button type="submit" class="w-full p-3 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition">Sign Up</button>
             </form>
-            <p class="error" id="signupError"></p>
-            <span class="toggle-link" id="showLogin">Already have an account? Login</span>
+            <p id="signupError" class="text-red-500 mt-2 hidden"></p>
+            <span id="showLogin" class="text-gray-400 mt-2 cursor-pointer underline hover:text-pink-500">Already have an account? Login</span>
         </div>
-        <div id="mainSection" class="main-section">
-            <div class="search-section">
-                <h1>Search Anime</h1>
-                <form id="searchForm" class="search-form">
-                    <input type="text" id="animeSearch" placeholder="Search anime..." required>
-                    <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+        <div id="mainSection" class="hidden flex-col items-center">
+            <div class="w-full max-w-2xl mb-6">
+                <form id="searchForm" class="flex gap-2">
+                    <select id="genreFilter" class="p-3 rounded-lg bg-gray-800 border border-gray-600 text-white">
+                        <option value="">All Genres</option>
+                        <option value="action">Action</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="comedy">Comedy</option>
+                        <option value="romance">Romance</option>
+                        <option value="isekai">Isekai</option>
+                        <option value="fantasy">Fantasy</option>
+                        <option value="shounen">Shounen</option>
+                        <option value="shoujo">Shoujo</option>
+                    </select>
+                    <input type="text" id="animeSearch" class="flex-1 p-3 rounded-lg bg-gray-800 border border-gray-600 text-white" placeholder="Search anime (e.g., Attack on Titan)">
+                    <button type="submit" class="p-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </form>
-                <p class="error" id="searchError"></p>
+                <p id="searchError" class="text-red-500 mt-2 hidden"></p>
             </div>
-            <div id="loading" class="loading">
-                <p>Loading trending anime...</p>
+            <div id="videoPlayerContainer" class="hidden w-full max-w-4xl mb-6">
+                <video id="animePlayer" class="video-js" controls preload="auto" width="100%" height="auto">
+                    <source src="" type="video/mp4">
+                    <p class="vjs-no-js">Please enable JavaScript to view the video.</p>
+                </video>
             </div>
-            <div class="trending-section">
-                <h2>Trending Anime</h2>
-                <div id="trendingGrid" class="trending-grid"></div>
+            <div class="w-full">
+                <h2 class="text-xl font-semibold mb-4">Trending Anime</h2>
+                <div id="trendingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </div>
-            <div class="result-section">
+            <div class="w-full mt-6">
                 <div id="results"></div>
             </div>
         </div>
     </div>
-    <script>
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const loginSection = document.getElementById('loginSection');
-        const signupSection = document.getElementById('signupSection');
-        const mainSection = document.getElementById('mainSection');
-        const loginError = document.getElementById('loginError');
-        const signupError = document.getElementById('signupError');
-        const searchForm = document.getElementById('searchForm');
-        const results = document.getElementById('results');
-        const searchError = document.getElementById('searchError');
-        const showSignup = document.getElementById('showSignup');
-        const showLogin = document.getElementById('showLogin');
-        const trendingGrid = document.getElementById('trendingGrid');
-        const loading = document.getElementById('loading');
-
-        // Show loading screen for 2 seconds
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    loginSection.style.display = 'none';
-                    signupSection.classList.remove('active');
-                    mainSection.classList.add('active');
-                    fetchTrendingAnime();
-                } else {
-                    loginSection.classList.add('active');
-                }
-            }, 2000);
-        });
-
-        // Toggle between login and signup
-        showSignup.addEventListener('click', () => {
-            loginSection.style.display = 'none';
-            signupSection.classList.add('active');
-        });
-        showLogin.addEventListener('click', () => {
-            signupSection.classList.remove('active');
-            loginSection.style.display = 'block';
-        });
-
-        // Client-side signup (demo; stores in localStorage)
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('signupUsername').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            if (!username || !email || !password) {
-                signupError.textContent = 'Please fill in all fields.';
-                signupError.classList.add('active');
-                return;
-            }
-            let users = JSON.parse(localStorage.getItem('users') || '[]');
-            if (users.find(user => user.email === email)) {
-                signupError.textContent = 'Email already exists.';
-                signupError.classList.add('active');
-                return;
-            }
-            users.push({ username, email, password });
-            localStorage.setItem('users', JSON.stringify(users));
-            signupError.textContent = 'Signup successful! Please login.';
-            signupError.classList.add('active');
-            setTimeout(() => {
-                signupSection.classList.remove('active');
-                loginSection.style.display = 'block';
-                signupError.classList.remove('active');
-            }, 2000);
-        });
-
-        // Client-side login (demo; checks localStorage)
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            if (!username || !password) {
-                loginError.textContent = 'Please fill in all fields.';
-                loginError.classList.add('active');
-                return;
-            }
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = users.find(u => u.username === username && u.password === password);
-            if (user) {
-                localStorage.setItem('isLoggedIn', 'true');
-                loginSection.style.display = 'none';
-                signupSection.classList.remove('active');
-                mainSection.classList.add('active');
-                fetchTrendingAnime();
-            } else {
-                loginError.textContent = 'Invalid username or password.';
-                loginError.classList.add('active');
-            }
-        });
-
-        // Fetch trending anime
-        async function fetchTrendingAnime() {
-            loading.classList.add('active');
-            try {
-                const res = await fetch('/api/trending');
-                if (!res.ok) throw new Error('API request failed');
-                const data = await res.json();
-                trendingGrid.innerHTML = '';
-                if (data.results?.length) {
-                    data.results.forEach(anime => {
-                        const div = document.createElement('div');
-                        div.className = 'trending-item';
-                        div.innerHTML = `
-                            <img src="${anime.image || 'https://via.placeholder.com/150'}" alt="${anime.title}">
-                            <h3>${anime.title}</h3>
-                        `;
-                        div.addEventListener('click', () => fetchEpisodes(anime.id, trendingGrid));
-                        trendingGrid.appendChild(div);
-                    });
-                } else {
-                    trendingGrid.innerHTML = '<p>No trending anime found.</p>';
-                }
-            } catch (err) {
-                trendingGrid.innerHTML = '<p>Failed to load trending anime. Please try again later.</p>';
-            } finally {
-                loading.classList.remove('active');
-            }
-        }
-
-        // Search anime
-        searchForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const query = document.getElementById('animeSearch').value.trim();
-            if (!query) {
-                searchError.textContent = 'Enter an anime name.';
-                searchError.classList.add('active');
-                return;
-            }
-            searchError.classList.remove('active');
-            results.innerHTML = '<p>Loading...</p>';
-            try {
-                const res = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
-                if (!res.ok) throw new Error('API request failed');
-                const data = await res.json();
-                results.innerHTML = '';
-                if (data.results?.length) {
-                    data.results.forEach(anime => {
-                        const div = document.createElement('div');
-                        div.className = 'result-item';
-                        div.innerHTML = `
-                            <img src="${anime.image || 'https://via.placeholder.com/60x90'}" alt="${anime.title}">
-                            <div>
-                                <h3>${anime.title}</h3>
-                                <button class="episode-btn" data-id="${anime.id}">View Episodes</button>
-                            </div>
-                        `;
-                        div.querySelector('.episode-btn').addEventListener('click', () => fetchEpisodes(anime.id, results));
-                        results.appendChild(div);
-                    });
-                } else {
-                    results.innerHTML = '<p>No results found.</p>';
-                }
-            } catch (err) {
-                searchError.textContent = 'Failed to search anime. Please try again.';
-                searchError.classList.add('active');
-            }
-        });
-
-        // Fetch episodes
-        async function fetchEpisodes(id, container) {
-            try {
-                const res = await fetch(`/api/details?id=${encodeURIComponent(id)}`);
-                if (!res.ok) throw new Error('API request failed');
-                const data = await res.json();
-                const episodes = data.episodes || 1;
-                let episodeHtml = '<div style="margin-top: 10px;">';
-                for (let i = 1; i <= Math.min(episodes, 50); i++) {
-                    episodeHtml += `<button class="download-btn" data-id="${id}" data-ep="${i}">Ep ${i}</button> `;
-                }
-                episodeHtml += '</div>';
-                container.innerHTML = episodeHtml;
-                container.querySelectorAll('.download-btn').forEach(btn => {
-                    btn.addEventListener('click', async () => {
-                        const ep = btn.dataset.ep;
-                        try {
-                            const res = await fetch(`/api/links?id=${encodeURIComponent(id)}&episode=${ep}`);
-                            if (!res.ok) throw new Error('API request failed');
-                            const data = await res.json();
-                            if (data.links?.sub?.default) {
-                                window.open(data.links.sub.default, '_blank');
-                            } else {
-                                alert('No download link available.');
-                            }
-                        } catch (err) {
-                            alert('Failed to fetch download link. Please try again.');
-                        }
-                    });
-                });
-            } catch (err) {
-                alert('Failed to fetch episodes. Please try again.');
-            }
-        }
-    </script>
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    <script src="/index.js"></script>
 </body>
 </html>
